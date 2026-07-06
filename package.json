@@ -1,0 +1,23 @@
+{
+  "name": "merntest",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/kumar-student/MERNTest#readme",
+  "bugs": {
+    "url": "https://github.com/kumar-student/MERNTest/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kumar-student/MERNTest.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "ejs",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
