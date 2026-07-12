@@ -1,6 +1,6 @@
 ## ExpressJS – Templating, Form Data
 
-Write a program using templating engine.
+### a. Write a program using templating engine.
 
 **Aim** : 
 To understand how to use a templating engine (EJS) in ExpressJS for dynamic HTML rendering.
@@ -20,9 +20,9 @@ npm init -y
 npm install express ejs
 ```
 
-Create app.jsand a folder viewsfor EJS templates. 
+Create `app.js` and a folder views for EJS templates. 
 
-**Step 2** : Create an EJS file index.ejsinside views.
+**Step 2** : Create an EJS file `index.ejs` inside views.
 Write the following code to render dynamic content.
 
 Run the program :
@@ -82,8 +82,10 @@ app.listen(PORT, () => {
 
 **Step 4** : Add Code to `views/index.ejs`
 ```html
-<html> <head>
-	<title>EJS Demo</title> </head>	
+<html> 
+	<head>
+		<title>EJS Demo</title> 
+	</head>	
 	<body>
 		<h1>Welcome, <%= user.name %>!</h1>
 		<p>
