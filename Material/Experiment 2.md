@@ -1,115 +1,106 @@
-## ExpressJS – Templating, Form Data
+# Experiment: Using a Templating Engine (EJS) in ExpressJS
 
-### a. Write a program using templating engine.
-
-**Aim** : 
+**Aim**:
 To understand how to use a templating engine (EJS) in ExpressJS for dynamic HTML rendering.
 
-**Software/Tools Required** :
-VS Code 
-Node.js 
-ExpressJS
-EJS (npm install ejs) 
+**Software/Tools Required**:
+- Visual Studio Code (VS Code)
+- Node.js
+- ExpressJS
+- EJS
 
-**Procedure (Step-by-step)** :
-**Step 1**: Create a new folder express-ejs-laband open in VS Code.
+**Procedure**
+**Step 1**: Create the Project
+1. Create a new folder named **express-ejs-lab** and open it in VS Code.
+2. Initialize a Node.js project by running the following commands:
 
-Initialize Node.js project :
-```js
+```bash
 npm init -y
 npm install express ejs
 ```
 
-Create `app.js` and a folder views for EJS templates. 
+3. Create the following project structure:
 
-**Step 2** : Create an EJS file `index.ejs` inside views.
-Write the following code to render dynamic content.
-
-Run the program :
-```js
-node app.js
-```
-
-Open a browser and visit http://localhost:3000.
-
-**Program**:
-Templating engine with Express.js (using EJS)
-
-This program demonstrates using a templating engine (EJS) with Express.js to render dynamic HTML content on the server-side.
-
-Project setup
 ```text
 your_express_app/
 ├── app.js
 └── views/
 ```
 
-Install dependencies
+**Step 2**: Configure ExpressJS
 
-In your project directory, open the terminal and run:
-```shell
-npm init -y
-npm install express ejs
-```
-
-**Step 3**: Express.js code(`app.js`)
-
-```js
-const express = require('express'); 
+Create a file named **app.js** and add the following code:
+```javascript
+const express = require('express');
 
 const app = express();
 const PORT = 3000;
 
-// Set EJS as the templating engine 
-app.set('view engine', 'ejs'); 
+// Set EJS as the templating engine
+app.set('view engine', 'ejs');
 
 // Route
 app.get('/', (req, res) => {
-	const user = { 
-		name: 'Student', 
-		course: 'Full Stack Development', 
-		college: 'PSCMR College' 
-	}; 
-	res.render('index', { user: user });
+    const user = {
+        name: 'Student',
+        course: 'Full Stack Development',
+        college: 'PSCMR College'
+    };
+
+    res.render('index', { user: user });
 });
 
 // Start server
 app.listen(PORT, () => {
-	console.log(`Server running at http://localhost:${PORT}`); 
+    console.log(`Server running at http://localhost:${PORT}`);
 });
-
 ```
 
-**Step 4** : Add Code to `views/index.ejs`
+**Step 3**: Create the EJS Template
+
+Inside the **views** folder, create a file named **index.ejs** and add the following code:
 ```html
-<html> 
-	<head>
-		<title>EJS Demo</title> 
-	</head>	
-	<body>
-		<h1>Welcome, <%= user.name %>!</h1>
-		<p>
-			You are enrolled in <b><%= user.course %></b> at <b><%= user.college %></b>.
-		</p>
-	</body>
+<html>
+<head>
+    <title>EJS Demo</title>
+</head>
+<body>
+    <h1>Welcome, <%= user.name %>!</h1>
+
+    <p>
+        You are enrolled in <b><%= user.course %></b> at
+        <b><%= user.college %></b>.
+    </p>
+</body>
 </html>
 ```
 
-**Step 5** : Run the Server
-```shell
+**Step 4**: Run the Application
+
+Run the server using the following command:
+```bash
 node app.js
 ```
 
-Visit http://localhost:3000
+Open a web browser and visit:
+```text
+http://localhost:3000
+```
 
->Place the output image here
+**Output**:
+The browser displays a webpage similar to the following:
+```
+Welcome, Student!
 
-**Viva Questions** :
+You are enrolled in Full Stack Development at PSCMR College.
+```
+
+**Viva Questions**:
 1. What is a templating engine in ExpressJS?
 2. How do you pass data from Express to an EJS template?
 3. What is the difference between EJS and static HTML?
 4. How can you include partial templates in EJS?
-5. What are the advantages of using EJS in Express JS?
+5. What are the advantages of using EJS in ExpressJS?
 
 ---
 ##### Example 1
@@ -130,16 +121,20 @@ mkdir project
 cd project
 touch app.js
 mkdir views
-cd views
 touch views/index.ejs
-touch views/result.ejs
+touch views/result.html
 ```
 
-app.js
+Install dependencies
+```shell
+npm install express ejs body-parser
+```
+
+**app.js**
 ```js
 const express = require('express');
-
 const bodyParser = require('body-parser'); 
+
 const app = express();
 const PORT = 3000;
 
@@ -156,7 +151,9 @@ app.get('/', (req, res) => {
 
 // Route to handle form submission 
 app.post('/submit', (req, res) => { 
-	const name = req.body.name; const email = req.body.email;
+	// const name = req.body.name;
+	// const email = req.body.email;
+	const { name, email } = req.body; 
 	res.render('result', { name: name, email: email }); 
 });
 
@@ -166,7 +163,7 @@ app.listen(PORT, () => {
 });
 ```
 
-views/index.ejs
+**views/index.ejs**
 ```html
 <!DOCTYPE html> 
 <html lang="en"> 
@@ -186,8 +183,8 @@ views/index.ejs
 </html>
 ```
 
-views/result.ejs
-```js
+**views/result.ejs**
+```html
 <!DOCTYPE html> 
 <html lang="en"> 
 	<head>
