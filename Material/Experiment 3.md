@@ -5,23 +5,37 @@
 **Aim**: 
 Write a program for session management using cookies and sessions.
 
-1. Install `cookie-parser`
-```shell
-npm install cookie-parser
-```
-
-2. Install `express-session`
-```shell
-npm install express-session
-```
-
-3. Create a file named `app.js` in **csa** (cookie-session-app) folder
+**Step 1**: Crete the project folder and navigate to it
 ```shell
 mkdir csa
 cd csa
 ```
 
-4. Writing the code
+Folder Structure
+```text
+csa/
+│
+├── app.js
+├── package.json
+├── package-lock.json
+└── node_modules/
+```
+
+**Step 3**: Initialize **npm**
+```shell
+npm init -y
+```
+**Step 4**: Install dependencies
+```shell
+npm install express express-session cookie-parser
+```
+
+**Step 5**: Create a file named **app.js** in **csa** (cookie-session-app) folder
+```shell
+touch app.js
+```
+
+**Step 6**: Program
 ```js
 // app.js
 
@@ -40,22 +54,25 @@ app.use(cookieParser());
 // Configure and use session middleware
 app.use(session({
 	secret: 'mySecretKey',    // Used to sign the session id cookie
-	resave: False,        // Avoid saving session if not modified
-	saveUninitialized: True,    // Save new session even if no data is added
-	cookie: {maxAge: 60000}    // Session expires in 1 minutes = 60000 ms
+	resave: false,        // Avoid saving session if not modified
+	saveUninitialized: true,    // Save new session even if no data is added
+	cookie: {
+		maxAge: 60000,    // Session expires in 1 minutes = 60000 ms
+		httpOnly: true
+	}
 }));
 
 // --------COOKIE ROUTES-------
 
 // Set a cookie on the browser
 app.get('/set-cookie', (req, res) => {
-	res.cookie('user', 'student123');    // Set a cookie named 'user'
+	res.cookie('user', 'student123', {maxAge:6000});    // Set a cookie named 'user'
 	res.send('Cookie has been set on the browser.');
 });
 
 // Access the stored cookie
 app.get('/get-cookie', (req, res) => {
-	const user = req.cookie.user;
+	const user = req.cookies.user;
 	res.send(`Cookie Value: ${user}`);
 });
 
@@ -73,15 +90,17 @@ app.get('/profile', (req, res) => {
 		res.send(`Welcome, ${req.session.username}. Your session id: ${req.sessionID}`);
 	}
 	else {
-		req.send('No session found. Please login first.');
+		res.send('No session found. Please login first.');
 	}
 });
 
 // Destroy session and logout
 app.get('/logout', (req, res) => {
 	req.session.destroy(err => {
-		if(err)
+		if(err) {
 			return res.send('Error during logout.');
+		}
+		res.clearCookie('connect.sid');
 		res.send('Logged out successfully. Session destroyed.');
 	});
 });
@@ -92,9 +111,62 @@ app.listen(PORT, () => {
 });
 ```
 
-5. Run the server
+**Step 7**: Run the server
 ```shell
 node app.js
+```
+
+**Step 8**: Testing
+
+**Set and retrieve cookie**:
+
+Open browser and visit the following address
+```text
+http://localhost:3000/set-cookie
+```
+
+Then go to
+```text
+http://localhost:3000/get-cookie
+```
+
+Expected output
+```text
+Cookie Value: student123
+```
+
+**Login**:
+
+Next visit the following address
+```text
+http://localhost:3000/login
+```
+
+Then go to
+```text
+http://localhost:3000/profile
+```
+
+Expected
+```text
+Welcome, student123
+```
+
+**Logout**:
+
+Visit the following url
+```text
+http://localhost:3000/logout
+```
+
+Then visit
+```text
+http://localhost:3000/profile
+```
+
+Expected
+```text
+No session found. Please login first.
 ```
 
 > Place output images here
@@ -110,6 +182,38 @@ node app.js
 **Aim**:
 Write a program for user authentication
 
+**Step 1**: Crete the project folder and navigate to it
+```shell
+mkdir auth-app
+cd auth-app
+```
+
+Folder Structure
+```text
+auth-app/
+│
+├── auth.js
+├── package.json
+├── package-lock.json
+└── node_modules/
+```
+
+**Step 2**: Initialize **npm**
+```shell
+npm init -y
+```
+
+**Step 3**: Install dependencies
+```shell
+npm install express express-session body-parser
+```
+
+**Step 4**: Create **auth.js**
+```shell
+touch auth.js
+```
+
+**Step 5**: Program
 ```js
 // auth.js
 
@@ -122,14 +226,17 @@ const app = express();
 const PORT = 3000;
 
 // Middleware to parse application/x-www-form-urlencoded (form data)
-app.use(bodyParser.urlencoded({extended: True}));
+app.use(bodyParser.urlencoded({extended: true}));
 
 // Configure session middleware
 app.use(session({
 	secret: 'secretKey123',    // Secret key to sign the session ID cookie (should be private and strong)
-	resave: False,    // Do not save session if unmodified
-	saveUninitialized: True,    // Save new sessions even if they are not modified
-	cookie: {maxAge: 60000}    // Session expires after 1 minutes = 60000 ms
+	resave: false,    // Do not save session if unmodified
+	saveUninitialized: true,    // Save new sessions even if they are not modified
+	cookie: {
+		maxAge: 60000,    // Session expires after 1 minutes = 60000 ms
+		httpOnly: true
+	}
 }));
 
 // Dummy user details (in real applications, these should be stored in a database)
@@ -143,9 +250,9 @@ const dummyUser = {
 app.get('/', (req, res) => {
 	res.send(`
 		<h2>Login page</h2>
-		<form method="POST" action="/login">
-			Username: <input type="text" name="Username" /><br/>
-			Password: <ipnut type="password" name="password" /><br/>
+		<form method="post" action="/login">
+			Username: <input type="text" name="username" /><br/>
+			Password: <input type="password" name="password" /><br/>
 			<button type="submit">Login</button>
 		</form>
 	`);
@@ -206,9 +313,66 @@ app.listen(PORT, () => {
 });
 ```
 
-Run the server
+**Step 6**: Run the server
 ```shell
 node auth.js
+```
+
+**Step 7**: Testing
+
+**Login**
+Open
+```text
+http://localhost:3000
+```
+
+Expected
+```text
+Login page
+```
+
+Enter username and password
+```text
+Username : student
+Password : 1234
+```
+
+Expected
+```text
+Authentication successful
+```
+
+**Dashboard**
+Open
+```text
+/dashboard
+```
+
+Expected
+```text
+Welcome to dashboard
+```
+
+**Logout**
+Click
+```text
+Logout
+```
+
+Expected
+```text
+You have been logged out
+```
+
+**Dashboard**
+Open
+```text
+/dashboard
+```
+
+Expected
+```text
+Unauthorized access
 ```
 
 **Viva Questions**:
