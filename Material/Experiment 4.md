@@ -1,10 +1,13 @@
 # ExpressJS - Database, RESTful APIs
+
 ### a. Write a program to connect MongoDB database using Mongoose and perform CRUD operations.
 
 **Aim**:
+
 To develop an ExpressJS application that connects to a MongoDB database using Mongoose and performs CRUD (Create, Read, Update, and Delete) operations through RESTful APIs.
 
 **Learning Outcomes**:
+
 After completing this experiment, students will be able to:
 - Connect an ExpressJS application to MongoDB using Mongoose.
 - Create a Mongoose schema and model.
@@ -13,6 +16,7 @@ After completing this experiment, students will be able to:
 - Store and retrieve data from MongoDB.
 
 **Software/Tools Required**:
+
 - Visual Studio Code (or any code editor)
 - Node.js
 - ExpressJS
@@ -21,13 +25,16 @@ After completing this experiment, students will be able to:
 - Postman or Thunder Client (VS Code Extension)
 
 **Prerequisites**:
+
 Students should have:
 - Basic knowledge of JavaScript
 - Basic understanding of ExpressJS
 - MongoDB installed and running locally (or a MongoDB Atlas account)
 
 **Project Structure**:
+
 ```text
+
 express-mongo-lab/
 │
 ├── app.js
@@ -39,8 +46,8 @@ express-mongo-lab/
 
 **Step 1**: Create a new folder named **express-mongo-lab** and open it in Visual Studio Code.
 
-
 **Step 2**: Initialize NodeJS project
+
 ```shell
 npm init -y
 ```
@@ -48,15 +55,19 @@ npm init -y
 **Step 3**: Install required packages
 
 Install ExpressJS and Mongoose
+
 ```shell
 npm install express mongoose
 ```
 
 **Step 4**: Create the Application File
+
 Create `app.js` file
 
 **Step 5**: Connect to MongoDB
+
 Use Mongoose to connect to the local MongoDB server.
+
 ```shell
 mongodb://127.0.0.1:27017
 ```
@@ -64,6 +75,7 @@ mongodb://127.0.0.1:27017
 > The database **mydb** is created automatically when the first document is inserted
 
 **Step 6**: Create a Schema and Model
+
 Define a schema for the **User** collection with the following fields
 - name
 - email
@@ -75,19 +87,22 @@ Create a Mongoose model named **User**.
 
 Create the following CRUD endpoints
 
-| HTTP Method | Endpoint     | Description           |
-| ----------- | ------------ | --------------------- |
-| POST        | `/users`     | Create a new user     |
-| GET         | `/users`     | Retrieve all users    |
-| GET         | `/users/:id` | Retrieve a user by ID |
-| PUT         | `/users/:id` | Update a user         |
-| DELETE      | `/users/:id` | Delete a user         |
+| HTTP Method  | Endpoint     | Description            |
+| ------------ | ------------ | ---------------------- |
+| POST         | `/users`     | Create a new user      |
+| GET          | `/users`     | Retrieve all users     |
+| GET          | `/users/:id` | Retrieve a user by ID  |
+| PUT          | `/users/:id` | Update a user          |
+| DELETE       | `/users/:id` | Delete a user          |
 
 **Step 8**: Execute the Application
 
 Run the server:
+
 ```shell
+
 node app.js
+
 ```
 
 If the connection is successful, the terminal displays:
@@ -97,37 +112,43 @@ Server running at http://localhost:3000
 ```
 
 **Step 9**: Test the APIs
+
 Use **Postman** or the **Thunder Client** extension to test each endpoint.
 
 **Create User**
 
 Method
+
 ```text
 post
 ```
 
 URL
+
 ```text
 http://localhost:3000/users
 ```
 
 Request Body(JSON)
+
 ```json
 {
-	"name": "Rahul",
-	"email": "rahul@example.com",
-	"age": 21
+    "name": "Rahul",
+    "email": "rahul@example.com",
+    "age": 21
 }
 ```
 
 **Retrieve All Users**
 
 Method
+
 ```text
 GET
 ```
 
 URL
+
 ```text
 http://localhost:3000/users
 ```
@@ -135,11 +156,13 @@ http://localhost:3000/users
 **Retrieve a User by ID**
 
 Method
+
 ```text
 GET
 ```
 
 URL
+
 ```text
 http://localhost:3000/users/<user_id>
 ```
@@ -149,11 +172,13 @@ Replace `<user_id>` with the MongoDB ObjectId returned while creating the user.
 Update a User
 
 Method
+
 ```text
 PUT
 ```
 
 URL
+
 ```text
 http://localhost:3000/users/<user_id>
 ```
@@ -161,15 +186,16 @@ http://localhost:3000/users/<user_id>
 Request Body
 ```json
 {
-	"name": "Rahul Kumar",
-	"email": "rahul@example.com",
-	"age": 22
+    "name": "Rahul Kumar",
+    "email": "rahul@example.com",
+    "age": 22
 }
 ```
 
 **Delete a User**
 
 Method
+
 ```text
 DELETE
 ```
@@ -178,11 +204,14 @@ URL
 ```text
 http://localhost:3000/users/<user_id>
 ```
+
 ---
+
 **Program**:
 
 **app.js**
 ```js
+
 const express = require("express");
 const mongoose = require("mongoose");
 
@@ -191,110 +220,111 @@ const PORT = 3000;
 
 // Middleware
 app.use(express.json());
-// Connect to MongoDB (Change DB name if you like) 
-mongoose.connect("mongodb://127.0.0.1:27017/mydb", {
-	useNewUrlParser: true, 
-	useUnifiedTopology: true
-}).then(() => {
-	console.log("Connected to MongoDB");
+
+// Connect to MongoDB (Change DB name if you like)
+mongoose.connect("mongodb://127.0.0.1:27017/mydb")
+.then(() => {
+    console.log("Connected to MongoDB");
 }).catch((err) => {
-	console.log(err);
+    console.log(err);
 });
 
 // User schema
 const userSchema = new mongoose.Schema({
-	name: String,
-	email: String,
-	age: Number
+    name: String,
+    email: String,
+    age: Number
 });
 
 // Create Model
 const User = mongoose.model("User", userSchema);
 
 // CRUD Routes
-
 // Create (Insert a new user)
 app.post("/users", async(req, res) => {
-	try {
-		const user = new User(req.body);
-		await user.save();
-		res.status(201).send(user);
-	}
-	catch(err) {
-		res.status(400).send(err);
-	}
+    try {
+        const user = new User(req.body);
+        await user.save();
+        res.status(201).send(user);
+    }
+
+    catch(err) {
+        res.status(400).send(err);
+    }
 });
 
 // Read (Get all users)
 app.get("/users", async(req, res) => {
-	try {
-		const users = await User.find();
-		res.send(users);
-	}
-	catch(err) {
-		res.status(500).send(err);
-	}
+    try {
+        const users = await User.find();
+        res.send(users);
+    }
+    catch(err) {
+        res.status(500).send(err);
+    }
 });
 
 // Read (Get a single user by id)
 app.get("/users/:id", async(req, res) => {
-	try {
-		const user = await User.findById(req.params.id);
-		if(!user)
-			return res.status(404).send("User not found");
-		res.send(user);
-	}
-	catch(err) {
-		res.status(500).send(err);
-	}
+    try {
+        const user = await User.findById(req.params.id);
+        if(!user)
+            return res.status(404).send("User not found");
+        res.send(user);
+    }
+    catch(err) {
+        res.status(500).send(err);
+    }
 });
 
 // Update (Update a user by id)
 app.put("/users/:id", async(req, res) => {
-	try {
-		const user = await User.findByIdAndUpdate(
-			req.params.id, req.body, {new: true}
-		);
-		if(!user)
-			return res.status(404).send("User not found");
-		res.send(user);
-	}
-	catch(err) {
-		res.status(400).send(err);
-	}
+    try {
+        const user = await User.findByIdAndUpdate(
+            req.params.id, req.body, {new: true}
+        );
+        if(!user)
+            return res.status(404).send("User not found");
+        res.send(user);
+    }
+    catch(err) {
+        res.status(400).send(err);
+    }
 });
 
 // Delete (Remove a user by id)
 app.delete("/users/:id", async(req, res) => {
-	try {
-		const user = await User.findByIdAndDelete(req.params.id);
-		if(!user)
-			return res.status(404).send("User not found");
-		res.send({message: "User deleted successfully"});
-	}
-	catch(err) {
-		res.status(500).send(err);
-	}
+    try {
+        const user = await User.findByIdAndDelete(req.params.id);
+        if(!user)
+            return res.status(404).send("User not found");
+        res.send({message: "User deleted successfully"});
+    }
+    catch(err) {
+        res.status(500).send(err);
+    }
 });
 
 // Start server
 app.listen(PORT, () => {
-	console.log(`Server running at http://localhost:${PORT}`);
+    console.log(`Server running at http://localhost:${PORT}`);
 });
 ```
 
 API Routes
 
-| Method | URL        | Purpose       |
-| ------ | ---------- | ------------- |
-| POST   | /users     | Add user      |
-| GET    | /users     | Get all users |
-| GET    | /users/:id | Get user      |
-| PUT    | /users/:id | Update user   |
-| DELETE | /users/:id | Delete user   |
+| Method  | URL         | Purpose        |
+| ------- | ----------- | -------------- |
+| POST    | /users      | Add user       |
+| GET     | /users      | Get all users  |
+| GET     | /users/:id  | Get user       |
+| PUT     | /users/:id  | Update user    |
+| DELETE  | /users/:id  | Delete user    |
 
 **Expected Output**:
+
 The application should:
+
 - Successfully connect to the MongoDB database.
 - Create new user records.
 - Retrieve all users stored in the database.
@@ -306,6 +336,7 @@ The application should:
 >Place screenshots of the application output and API responses here
 
 **Viva Questions**:
+
 1. What is Mongoose and why is it used in NodeJS?
 2. How do you define a schema in Mongoose?
 3. What are the main CRUD operations in RESTful API
@@ -316,10 +347,12 @@ The application should:
 8. Why is MongoDB called a NoSQL database?
 ### b. Write a program to develop a single page application using RESTful APIs.
 
-**Aim**:
+**Aim**: 
+
 To develop a simple Single-Page Application (SPA) using HTML, CSS, and JavaScript that interacts with RESTful APIs built using ExpressJS.
 
-**Learning Outcomes**:
+**Learning Outcomes**: 
+
 After completing this experiment, students will be able to:
 - Develop a Single-Page Application (SPA).
 - Consume RESTful APIs using the Fetch API.
@@ -328,13 +361,14 @@ After completing this experiment, students will be able to:
 - Serve static web pages using ExpressJS.
 
 **Software/Tools required**:
+
 - VS Code or any code editor
 - NodeJS
 - ExpressJS
 - HTML, CSS, JavaScript (frontend)
 
 **Folder Structure**:
-```text
+```
 spa-lab/
 │
 ├── server.js
@@ -345,58 +379,59 @@ spa-lab/
 │   └── script.js
 ```
 
-**Procedure**:
-**Step 1**: Create **spa-lab** folder.
+**Procedure**: **Step 1**: Create **spa-lab** folder.
+
 ```shell
 mkdir spa-lab
 cd spa-lab
 ```
 
 **Step 2**: Initialize NodeJS project:
+
 ```shell
 npm init -y
 ```
 
 **Step 3**: Install Dependencies
+
 ```shell
 npm install express cors
 ```
 
-**Step 4**: Create backend 
-Create `server.js` with RESTful APIs.
-The server should
+**Step 4**: Create backend Create `server.js` with RESTful APIs. The server should
+
 - Create REST APIs
 - Store users in an in-memory array
-- Serve frontend files from the **public** folder
+- Serve frontend files from the **public** folder
 
-**Step 5**: Create Frontend
-Inside the public folder create
+**Step 5**: Create Frontend Inside the public folder create
+
 - index.html
 - style.css
 - script.js
 
 The frontend should allow users to
+
 - Add a user
 - Display all users
 - Edit a user
-- Delete a user
-Without reloading the page
+- Delete a user Without reloading the page
 
-**Step 6**: Serve Static Files
-Add the following middleware in **server.js** to serve statis frontend files with Express.
+**Step 6**: Serve Static Files Add the following middleware in **server.js** to serve statis frontend files with Express.
 
 **server.js**
+
 ```js
 app.use(express.static("public"));
 ```
 
 **Step 7**: Run the application:
+
 ```shell
 node server.js
 ```
 
-**Step 8**: Open the application
-Open the browser and visit. http://localhost:3000
+**Step 8**: Open the application Open the browser and visit. [http://localhost:3000](http://localhost:3000/)
 
 **Endpoints**
 
@@ -412,7 +447,7 @@ Open the browser and visit. http://localhost:3000
 
 **Program**:
 
-**server.js** (backend)
+`server.js`
 ```js
 const express = require("express");
 const cors = require("cors");
@@ -431,176 +466,312 @@ let idCounter = 1;
 
 // Create
 app.post("/api/users", (req, res) => {
-	if(name.trim()==="" || email.trim()===""){ 
-		alert("Please enter Name and Email"); 
-		return; 
-	}
-	
-	// const user = { id: idCounter++, ...req.body };
-	const user = { 
-		id: idCounter++,
-		name: req.body.name,
-		email: req.body.email
-	}; 
-	
-	users.push(user); 
-	res.status(201).json(user); 
+    const { name, email } = req.body;
+
+    if (!name || !email || name.trim() === "" || email.trim() === "") {
+        return res.status(400).json({
+            message: "Name and Email are required"
+        });
+    }
+
+    const user = {
+        id: idCounter++,
+        name,
+        email
+    };
+
+    const exists = users.some(
+        user => user.email === email
+    );
+
+  
+
+    if(exists){
+        return res.status(409).json({
+            message:"Email already exists"
+        });
+    }
+
+    users.push(user);
+    res.status(201).json(user);
 });
 
 // Read All
 app.get("/api/users", (req, res) => {
-	res.json(users);
+    res.json(users);
 });
 
 // Read One
 app.get("/api/users/:id", (req, res) => {
-	const user = users.find((u) => u.id == req.params.id);
-	
-	if (!user) 
-		return res.status(404).json({ 
-			message: "User not found" 
-		});
+    const id = Number(req.params.id);
+    if (isNaN(id)) {
+    return res.status(400).json({
+        message: "Invalid user id"
+    });
+}
+    const user = users.find(u => u.id === id);
+    
+    if (!user)
+        return res.status(404).json({
+            message: "User not found"
+        });
 
-	res.json(user);
+    res.json(user);
 });
 
 // Update
-app.put("/api/users/:id", (req, res) => { 
-	const user = users.find((u) => u.id == req.params.id); 
-	if (!user) 
-		return res.status(404).json({ 
-			message: "User not found" 
-		}); 
+app.put("/api/users/:id", (req, res) => {
+    const id = Number(req.params.id);
 
-	user.name = req.body.name || user.name; 
-	user.email = req.body.email || user.email; 
-	res.json(user); 
+    if (isNaN(id)) {
+        return res.status(400).json({
+            message: "Invalid user id"
+        });
+    }
+
+    const user = users.find(u => u.id === id);
+
+    if (!user) {
+        return res.status(404).json({
+            message: "User not found"
+        });
+    }
+    
+    const { name, email } = req.body;
+
+    if (
+        (name !== undefined && name.trim() === "") ||
+        (email !== undefined && email.trim() === "")
+    ) {
+        return res.status(400).json({
+            message: "Invalid data"
+        });
+    }
+
+    if (name !== undefined) {
+        user.name = name;
+    }
+
+    if (email !== undefined) {
+        const exists = users.some(
+            u => u.email === email && u.id !== user.id
+        );
+
+        if (exists) {
+            return res.status(409).json({
+                message: "Email already exists"
+            });
+        }
+        
+        user.email = email;
+    }
+    
+    res.json(user);
 });
 
+  
+
 // Delete
-app.delete("/api/users/:id", (req, res) => { 
-	const index = users.findIndex(u => u.id == req.params.id);
-	
-	if(index === -1){
-	    return res.status(404).json({
-	        message:"User not found"
-	    });
-	}
-	
-	users.splice(index,1);
-	
-	res.json({
-	    message:"User deleted successfully"
-	});
+app.delete("/api/users/:id", (req, res) => {
+    const id = Number(req.params.id);
+    if (isNaN(id)) {
+    return res.status(400).json({
+        message: "Invalid user id"
+    });
+}
+
+    const index = users.findIndex(u => u.id === id);
+    if(index === -1){
+        return res.status(404).json({
+            message:"User not found"
+        });
+    }
+
+    const deletedUser = users.splice(index,1)[0];
+    
+    res.json({
+        message:"User deleted successfully",
+        user: deletedUser
+    });
 });
 
 // Start server
 app.listen(PORT, () => {
-	console.log(`Server running at http://localhost:${PORT}`);
+    console.log(`Server running at http://localhost:${PORT}`);
 });
 ```
 
-**script.js**
+`public/script.js`
 ```js
-const API = "/users";
+const API = "/api/users";
 
 let editingId = null;
 
 async function loadUsers() {
-	const response = await fetch(API);
-	const users = await response.json();
+    const response = await fetch(API);
 
-	const tbody = document.querySelector("tbody");
-	tbody.innerHTML = "";
-	
-	users.forEach(user => {
-		tbody.innerHTML += `
-			<tr>
-				<td>${user.id}</td>
-				<td>${user.name}</td>
-				<td>${user.email}</td>
-				<td> 
-					<button onclick="editUser(${user.id})"> Edit </button> 
-					<button onclick="deleteUser(${user.id})"> Delete </button> 
-				</td>
-			</tr>
-		`;
-	});
+    if(!response.ok){
+        console.error("Failed:", response.status);
+        return;
+    }
+
+    const users = await response.json();
+    const tbody = document.querySelector("tbody");
+
+    if(users.length === 0){
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="4">
+                    No users found
+                </td>
+            </tr>
+        `;
+        return;
+    }
+
+    let html = "";
+    users.forEach(user => {
+        html += `
+            <tr>
+                <td>${user.id}</td>
+                <td>${user.name}</td>
+                <td>${user.email}</td>
+                <td>
+                    <button onclick="editUser(${user.id})"> Edit </button>
+                    <button onclick="deleteUser(${user.id})"> Delete </button>
+                </td>
+            </tr>
+        `;
+    });
+
+    tbody.innerHTML = html;
 }
 
 async function saveUser() {
-    const name = document.getElementById("name").value;
-    const email = document.getElementById("email").value;
+    const name = document.getElementById("name").value.trim();;
+    const email = document.getElementById("email").value.trim();
 
-    const data = {
-        name,
-        email
-    };
+    if(name.trim()==="" || email.trim()===""){
+        alert("Please enter Name and Email");
+        return;
+    }
 
-    if(editingId === null){
-        await fetch(API,{
-            method:"POST",
-            headers:{
-                "Content-Type":"application/json"
-            },
-            body:JSON.stringify(data)
-        });
-    }
-    else{
-        await fetch(`${API}/${editingId}`,{
-            method:"PUT",
-            headers:{
-                "Content-Type":"application/json"
-            },
-            body:JSON.stringify(data)
-        });
+    const data = {
+        name,
+        email
+    };  
 
-        editingId = null;
-        document.getElementById("saveBtn").innerText =
-            "Add User";
-    }
+    if(editingId === null){
+        try {
+            const response = await fetch(API,{
+                method:"POST",
+                headers:{
+                    "Content-Type":"application/json"
+                },
+                body:JSON.stringify(data)
+            });
 
-    document.getElementById("name").value = "";
-    document.getElementById("email").value = "";
-    
-    document.getElementById("name").focus();
-    await loadUsers();
+            if(!response.ok){
+                const error = await response.json();  
+                alert(error.message);
+                return;
+            }
+        }
+
+        catch(error) {
+            console.error(error);
+            alert("Unable to connect to server");            
+        }
+    }
+
+    else{
+        try {
+            const response = await fetch(`${API}/${editingId}`,{
+                method:"PUT",
+                headers:{
+                    "Content-Type":"application/json"
+                },
+                body:JSON.stringify(data)
+            });
+            if(!response.ok){
+                const error = await response.json();
+                alert(error.message);
+                return;
+            }
+        }
+
+        catch(error){
+            console.error(error);
+            alert("Unable to connect to server");
+        }  
+        editingId = null;
+        document.getElementById("saveBtn").innerText =
+            "Add User";
+    }
+
+    document.getElementById("name").value = "";
+    document.getElementById("email").value = "";
+    document.getElementById("name").focus();
+    await loadUsers();
 }
 
 async function editUser(id){
-    const response = await fetch(`${API}/${id}`);
+    let response;
 
-    const user = await response.json();
+    try{
+        response = await fetch(`${API}/${id}`);
+    }
 
-    document.getElementById("name").value = user.name;
-    document.getElementById("email").value = user.email;
+    catch(error){
+        console.error(error);
+        alert("Unable to connect to server");
+        return;
+    }
 
-    editingId = id;
-    document.getElementById("saveBtn").innerText = "Update User";
+    if(!response.ok){
+        alert("Unable to load user.");
+        return;
+    }
+
+    const user = await response.json();
+
+    document.getElementById("name").value = user.name;
+    document.getElementById("email").value = user.email;
+
+    editingId = id;
+    
+    document.getElementById("saveBtn").innerText = "Update User";
 }
 
+  
+
 async function deleteUser(id) {
-    await fetch(`${API}/${id}`, {
-        method: "DELETE"
-    });
+    try {
+        await fetch(`${API}/${id}`, {
+            method: "DELETE"
+        });
+    }
 
-    // If the deleted user was being edited,
-    // return the application to Add mode.
-    if (editingId === id) {
-        editingId = null;
+    catch(error){
+        console.error(error);
+        alert("Unable to connect to server");
+    }
 
-        document.getElementById("name").value = "";
-        document.getElementById("email").value = "";
-
-        document.getElementById("saveBtn").innerText = "Add User";
-    }
-    await loadUsers();
+    // If the deleted user was being edited,
+    // return the application to Add mode.
+    if (editingId === id) {
+        editingId = null;
+        document.getElementById("name").value = "";
+        document.getElementById("email").value = "";
+        document.getElementById("saveBtn").innerText = "Add User";
+    }
+    await loadUsers();
 }
 
 loadUsers();
 ```
 
-**style.css**
+`public/style.css`
 ```css
 body{
     font-family: Arial;
@@ -628,7 +799,7 @@ th,td{
 }
 ```
 
-**index.html**
+`public/index.html`
 ```html
 <!DOCTYPE html>
 <html>
@@ -658,13 +829,12 @@ th,td{
 </html>
 ```
 
-**Execution**
-Open the browser and visit http://localhost:3000
+**Execution** Open the browser and visit [http://localhost:3000](http://localhost:3000/)
 
-**Expected Output**:
-A single-page frontend allows creating, viewing, updating, and deleting tasks by interacting with REST APIs.
+**Expected Output**: A single-page frontend allows creating, viewing, updating, and deleting tasks by interacting with REST APIs.
 
 **Viva Questions**:
+
 1. What is a single-page application (SPA)?
 2. How do frontend and backend communicate in a SPA?
 3. Why is CORS required in ExpressJS for frontend-backend communication?
@@ -673,11 +843,10 @@ A single-page frontend allows creating, viewing, updating, and deleting tasks by
 
 ### C. Develop a Single-Page Application (SPA) using ExpressJS RESTful APIs and MongoDB
 
-**Aim**
-To develop a Single-Page Application (SPA) using HTML, CSS and JavaScript that interacts with ExpressJS RESTful APIs backed by MongoDB using Mongoose.
+**Aim** To develop a Single-Page Application (SPA) using HTML, CSS and JavaScript that interacts with ExpressJS RESTful APIs backed by MongoDB using Mongoose.
 
-**Learning Outcomes**
-After completing this experiment, students will be able to:
+**Learning Outcomes** After completing this experiment, students will be able to:
+
 - Develop a Single-Page Application using HTML, CSS and JavaScript
 - Consume RESTful APIs using the Fetch API
 - Perform CRUD operations on MongoDB through ExpressJS
@@ -685,6 +854,7 @@ After completing this experiment, students will be able to:
 - Integrate frontend and backend components into a complete web application
 
 **Software/Tools Required**
+
 - Visual Studio Code
 - Node.js
 - ExpressJS
@@ -693,7 +863,8 @@ After completing this experiment, students will be able to:
 - Modern Web Browser
 
 **Folder Structure**:
-```text
+
+```
 express-mongo-spa/
 │
 ├── app.js
@@ -705,56 +876,58 @@ express-mongo-spa/
     └── script.js
 ```
 
-**Procedure (Step-by-Step)**
-**Step 1**: Copy the completed **express-mongo-lab** project's files into a new folder named **express-mongo-spa**.
+**Procedure (Step-by-Step)** **Step 1**: Copy the completed **express-mongo-lab** project's files into a new folder named **express-mongo-spa**.
 
-**Step 2**: Copy the **public** folder from **spa-lab** into project **express-mongo-spa**
+**Step 2**: Copy the **public** folder from **spa-lab** into project **express-mongo-spa**
 
 **Step 3**: Install dependencies
+
 ```shell
 npm install
 ```
 
 of if needed
+
 ```shell
 npm install express mongoose cors
 ```
 
-**Step 4**: Modify **app.js**
-Add the middleware code to the app.js before defining the routes.
+**Step 4**: Modify **app.js** Add the middleware code to the app.js before defining the routes.
 
 **app.js**
+
 ```js
 // ...
 app.use(express.static("public"));
 
 // ...
 ```
+
 This serves the frontend files.
 
 **Step 7**: Run the application
+
 ```shell
 node app.js
 ```
 
-**Step 8**: Open http://localhost:3000
+**Step 8**: Open [http://localhost:3000](http://localhost:3000/)
 
-**Step 9**: Perform CRUD operations
-Perform:
+**Step 9**: Perform CRUD operations Perform:
+
 - Add user
 - View users
 - Edit user
-- Delete user
-Verify data in MongoDB
+- Delete user Verify data in MongoDB
 
 ---
 
 **Program**
 
-**Backend**
-Use the app.js developed in **express-mongo-lab**. No changes are required to the MongoDB connection, schema, model and CRUD API implementation.
+**Backend** Use the app.js developed in **express-mongo-lab**. No changes are required to the MongoDB connection, schema, model and CRUD API implementation.
 
 Add only this middleware
+
 ```js
 // Middleware 
 app.use(express.json()); 
