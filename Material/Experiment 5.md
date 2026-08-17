@@ -98,13 +98,25 @@ These packages allow us to create and display React components.
 Install the development tool
 
 ```shell
-npm install -D vite
+npm install -D vite @vitejs/plugin-react
 ```
 
 Create **vite.config.js** file
 
 ```shell
 touch vite.config.js
+```
+
+Write the following code in **vite.config.js**
+
+```js
+// vite.config.js
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+export default defineConfig({
+	plugins: [react()],
+});
 ```
 
 **Step 5**: Modify package.json
@@ -163,8 +175,8 @@ import { createRoot } from "react-dom/client";
 
 import App from "./App";
 
-ReactDOM.createRoot(
-	document.getElementById("root");
+createRoot(
+	document.getElementById("root")
 ).render(<App />);
 ```
 
@@ -556,7 +568,7 @@ npm run dev
 **src/App.jsx**
 
 ```jsx
-import React, { Component } from "react";
+import { Component } from "react";
 import { useState } from 'react';
 import './App.css';
 
@@ -564,7 +576,7 @@ function Header({ title }) {
   return <h1>{title}</h1>;
 }
 
-class Student extends React.Component {
+class Student extends Component {
   render() {
     return (
       <>
